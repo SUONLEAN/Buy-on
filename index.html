@@ -17,9 +17,9 @@
     --card-bg: #ffffff;
     --shadow: 0 4px 24px rgba(232,93,138,0.10);
   }
-
+ 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--cream);
@@ -27,7 +27,7 @@
     min-height: 100vh;
     padding-bottom: 100px;
   }
-
+ 
   /* HEADER */
   .header {
     background: white;
@@ -75,7 +75,7 @@
     display: flex; align-items: center; justify-content: center;
     display: none;
   }
-
+ 
   /* SEARCH */
   .search-bar {
     position: relative;
@@ -100,7 +100,7 @@
     font-size: 14px;
     color: var(--text-muted);
   }
-
+ 
   /* CATEGORIES */
   .categories {
     display: flex;
@@ -128,7 +128,7 @@
     border-color: var(--pink);
     color: white;
   }
-
+ 
   /* BANNER */
   .banner {
     margin: 8px 20px 16px;
@@ -163,7 +163,7 @@
     border-radius: 50px;
     margin-top: 8px;
   }
-
+ 
   /* SECTION TITLE */
   .section-title {
     padding: 4px 20px 12px;
@@ -171,7 +171,7 @@
     font-size: 18px;
     font-weight: 700;
   }
-
+ 
   /* PRODUCT GRID */
   .product-grid {
     display: grid;
@@ -179,7 +179,7 @@
     gap: 12px;
     padding: 0 20px;
   }
-
+ 
   .product-card {
     background: white;
     border-radius: 16px;
@@ -189,7 +189,7 @@
     cursor: pointer;
   }
   .product-card:active { transform: scale(0.97); }
-
+ 
   .product-img {
     width: 100%;
     aspect-ratio: 1;
@@ -200,7 +200,7 @@
     justify-content: center;
     font-size: 48px;
   }
-
+ 
   .product-info { padding: 10px 12px 12px; }
   .product-name {
     font-size: 13px;
@@ -240,7 +240,7 @@
     transition: background 0.2s;
   }
   .add-btn:active { background: var(--pink-dark); }
-
+ 
   .badge-sale {
     position: absolute;
     top: 8px; left: 8px;
@@ -252,7 +252,7 @@
     border-radius: 50px;
   }
   .product-img-wrap { position: relative; }
-
+ 
   /* CART MODAL */
   .overlay {
     display: none;
@@ -262,7 +262,7 @@
     z-index: 200;
   }
   .overlay.show { display: block; }
-
+ 
   .cart-modal {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -276,7 +276,7 @@
     transition: transform 0.35s cubic-bezier(.32,1.2,.5,1);
   }
   .cart-modal.show { transform: translateY(0); }
-
+ 
   .cart-handle {
     width: 40px; height: 4px;
     background: #e8d5de;
@@ -315,7 +315,7 @@
     font-weight: 700;
   }
   .qty-num { font-size: 13px; font-weight: 600; min-width: 16px; text-align: center; }
-
+ 
   .cart-empty {
     text-align: center;
     padding: 32px 0;
@@ -323,7 +323,7 @@
     font-size: 14px;
   }
   .cart-empty .empty-icon { font-size: 48px; margin-bottom: 8px; }
-
+ 
   .cart-total {
     display: flex;
     justify-content: space-between;
@@ -332,7 +332,7 @@
     font-size: 15px;
   }
   .total-price { color: var(--pink); font-family: 'Playfair Display', serif; font-size: 18px; }
-
+ 
   .checkout-btn {
     width: 100%;
     background: linear-gradient(135deg, #e85d8a, #f7a8c4);
@@ -349,7 +349,7 @@
     transition: opacity 0.2s;
   }
   .checkout-btn:active { opacity: 0.85; }
-
+ 
   /* TOAST */
   .toast {
     position: fixed;
@@ -369,11 +369,11 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- HEADER -->
 <div class="header">
   <div class="header-top">
-    <div class="logo">Kimmy <span>Store</span></div>
+    <div class="logo">Buy On <span>Trend</span></div>
     <button class="cart-btn" onclick="toggleCart()">
       🛒
       <span class="cart-count" id="cartCount">0</span>
@@ -384,7 +384,7 @@
     <input type="text" placeholder="ស្វែងរកទំនិញ..." oninput="filterProducts(this.value)" id="searchInput">
   </div>
 </div>
-
+ 
 <!-- CATEGORIES -->
 <div class="categories" id="categories">
   <button class="cat-btn active" onclick="filterCat('all', this)">ទាំងអស់</button>
@@ -394,21 +394,21 @@
   <button class="cat-btn" onclick="filterCat('toy', this)">🧸 Toys</button>
   <button class="cat-btn" onclick="filterCat('cloth', this)">👗 Clothes</button>
 </div>
-
+ 
 <!-- BANNER -->
 <div class="banner">
-  <h2>សម្រាប់ទារកទំនើប 🌸</h2>
+  <h2>Buy On Trend 🌸</h2>
   <p>ទំនិញល្អ ថ្លៃសមរម្យ ដឹកជញ្ជូនរហ័ស</p>
   <span class="banner-badge">FREE SHIP $20+</span>
 </div>
-
+ 
 <!-- PRODUCTS -->
 <div class="section-title">ទំនិញពេញនិយម</div>
 <div class="product-grid" id="productGrid"></div>
-
+ 
 <!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
-
+ 
 <!-- CART MODAL -->
 <div class="cart-modal" id="cartModal">
   <div class="cart-handle"></div>
@@ -416,15 +416,15 @@
   <div id="cartItems"></div>
   <div id="cartFooter"></div>
 </div>
-
+ 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 // Telegram WebApp init
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
-
+ 
 // ── PRODUCTS DATA ──────────────────────────────────────────────
 const products = [
   { id:1, name:"Johnson's Baby Lotion", brand:"Johnson's", price:4.50, emoji:"🧴", cat:"baby", sale:false },
@@ -438,10 +438,10 @@ const products = [
   { id:9, name:"Baby Food Gerber Mix", brand:"Gerber", price:6.00, emoji:"🥣", cat:"feed", sale:false },
   { id:10, name:"Sunscreen Baby SPF50", brand:"Banana Boat", price:10.00, emoji:"☀️", cat:"skin", sale:false },
 ];
-
+ 
 let cart = {};
 let filtered = [...products];
-
+ 
 // ── RENDER PRODUCTS ────────────────────────────────────────────
 function renderProducts(list) {
   const grid = document.getElementById('productGrid');
@@ -466,7 +466,7 @@ function renderProducts(list) {
     </div>
   `).join('');
 }
-
+ 
 // ── FILTER ─────────────────────────────────────────────────────
 function filterCat(cat, btn) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -478,7 +478,7 @@ function filterCat(cat, btn) {
   );
   renderProducts(filtered);
 }
-
+ 
 function filterProducts(val) {
   const activeCat = document.querySelector('.cat-btn.active');
   const cat = activeCat ? activeCat.getAttribute('onclick').match(/'(\w+)'/)?.[1] || 'all' : 'all';
@@ -488,7 +488,7 @@ function filterProducts(val) {
   );
   renderProducts(filtered);
 }
-
+ 
 // ── CART ───────────────────────────────────────────────────────
 function addToCart(id) {
   cart[id] = (cart[id] || 0) + 1;
@@ -496,14 +496,14 @@ function addToCart(id) {
   const p = products.find(x => x.id === id);
   showToast(`${p.emoji} ${p.name} បានបន្ថែម!`);
 }
-
+ 
 function updateCartBadge() {
   const total = Object.values(cart).reduce((a,b) => a+b, 0);
   const badge = document.getElementById('cartCount');
   badge.textContent = total;
   badge.style.display = total > 0 ? 'flex' : 'none';
 }
-
+ 
 function toggleCart() {
   const modal = document.getElementById('cartModal');
   const overlay = document.getElementById('overlay');
@@ -512,18 +512,18 @@ function toggleCart() {
   modal.classList.toggle('show', !isOpen);
   overlay.classList.toggle('show', !isOpen);
 }
-
+ 
 function renderCart() {
   const items = Object.entries(cart);
   const container = document.getElementById('cartItems');
   const footer = document.getElementById('cartFooter');
-
+ 
   if (items.length === 0) {
     container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div>កន្ត្រកទទេ</div>`;
     footer.innerHTML = '';
     return;
   }
-
+ 
   let total = 0;
   container.innerHTML = items.map(([id, qty]) => {
     const p = products.find(x => x.id == id);
@@ -543,7 +543,7 @@ function renderCart() {
       </div>
     `;
   }).join('');
-
+ 
   footer.innerHTML = `
     <div class="cart-total">
       <span>សរុប</span>
@@ -552,37 +552,37 @@ function renderCart() {
     <button class="checkout-btn" onclick="checkout()">✅ បញ្ជាទិញ</button>
   `;
 }
-
+ 
 function changeQty(id, delta) {
   cart[id] = (cart[id] || 0) + delta;
   if (cart[id] <= 0) delete cart[id];
   updateCartBadge();
   renderCart();
 }
-
+ 
 function checkout() {
   const items = Object.entries(cart);
   if (items.length === 0) return;
-
+ 
   const lines = items.map(([id, qty]) => {
     const p = products.find(x => x.id == id);
     return `${p.emoji} ${p.name} x${qty} = $${(p.price * qty).toFixed(2)}`;
   });
   const total = items.reduce((sum, [id, qty]) => sum + products.find(x => x.id == id).price * qty, 0);
   const msg = `🛒 Order:\n${lines.join('\n')}\n\n💰 សរុប: $${total.toFixed(2)}`;
-
+ 
   if (tg) {
     tg.sendData(msg);
   } else {
     alert(msg);
   }
-
+ 
   cart = {};
   updateCartBadge();
   toggleCart();
   showToast('✅ បញ្ជាទិញបានជោគជ័យ!');
 }
-
+ 
 // ── TOAST ──────────────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -590,7 +590,7 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
 }
-
+ 
 // ── INIT ───────────────────────────────────────────────────────
 renderProducts(products);
 </script>
