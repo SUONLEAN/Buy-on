@@ -128,28 +128,6 @@ bot.on("message", async (msg) => {
   }
 });
 
-// ─── ADMIN ORDER NOTIFICATIONS ───────────────────────────────────────────────
-const ADMIN_ID = "843084839";
-
-bot.on("web_app_data", (msg) => {
-  const order = msg.web_app_data.data;
-  const customer = msg.from.first_name || "Unknown";
-  const username = msg.from.username ? `@${msg.from.username}` : "គ្មាន username";
-  const userId = msg.from.id;
-
-  // ផ្ញើទៅ Admin
-  bot.sendMessage(ADMIN_ID,
-    `🛒 *Order ថ្មី!*\n\n👤 Customer: ${customer}\n🔗 Username: ${username}\n🆔 ID: ${userId}\n\n${order}`,
-    { parse_mode: "Markdown" }
-  );
-
-  // ឆ្លើយ Customer
-  bot.sendMessage(msg.chat.id,
-    `✅ *បញ្ជាទិញបានជោគជ័យ!*\n\nអរគុណសម្រាប់ការទិញ! 🌸\nយើងនឹងទាក់ទងអ្នកឆាប់ៗ 💬`,
-    { parse_mode: "Markdown" }
-  );
-});
-
 // ─── ERROR HANDLING ───────────────────────────────────────────────────────────
 bot.on("polling_error", (err) => {
   console.error("Polling error:", err.message);
