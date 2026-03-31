@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kimmy Store</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #e85d8a;
+    --pink-light: #fce4ee;
+    --pink-dark: #c0396a;
+    --cream: #fff8f3;
+    --text: #2d1a24;
+    --text-muted: #9e7a8a;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 24px rgba(232,93,138,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  /* HEADER */
+  .header {
+    background: white;
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(232,93,138,0.08);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pink);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--text); }
+  .cart-btn {
+    position: relative;
+    background: var(--pink-light);
+    border: none;
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .cart-btn:active { background: #f5c6d8; }
+  .cart-count {
+    position: absolute;
+    top: -4px; right: -4px;
+    background: var(--pink);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    display: none;
+  }
+
+  /* SEARCH */
+  .search-bar {
+    position: relative;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 10px 16px 10px 38px;
+    border: 1.5px solid #f0d8e4;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: var(--cream);
+    color: var(--text);
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--pink); }
+  .search-bar .search-icon {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* CATEGORIES */
+  .categories {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    white-space: nowrap;
+    padding: 7px 16px;
+    border-radius: 50px;
+    border: 1.5px solid #f0d8e4;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-btn.active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+  }
+
+  /* BANNER */
+  .banner {
+    margin: 8px 20px 16px;
+    background: linear-gradient(135deg, #e85d8a 0%, #f7a8c4 100%);
+    border-radius: 18px;
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner::after {
+    content: '🌸';
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 52px;
+    opacity: 0.3;
+  }
+  .banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .banner p { font-size: 12px; opacity: 0.9; }
+  .banner-badge {
+    display: inline-block;
+    background: white;
+    color: var(--pink);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    margin-top: 8px;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    padding: 4px 20px 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* PRODUCT GRID */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+  .product-card:active { transform: scale(0.97); }
+
+  .product-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--pink-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+  }
+
+  .product-info { padding: 10px 12px 12px; }
+  .product-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .product-brand {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .product-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--pink);
+  }
+  .add-btn {
+    background: var(--pink);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .add-btn:active { background: var(--pink-dark); }
+
+  .badge-sale {
+    position: absolute;
+    top: 8px; left: 8px;
+    background: #ff4b6e;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 50px;
+  }
+  .product-img-wrap { position: relative; }
+
+  /* CART MODAL */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+  }
+  .overlay.show { display: block; }
+
+  .cart-modal {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-radius: 24px 24px 0 0;
+    padding: 20px;
+    z-index: 201;
+    max-height: 75vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(.32,1.2,.5,1);
+  }
+  .cart-modal.show { transform: translateY(0); }
+
+  .cart-handle {
+    width: 40px; height: 4px;
+    background: #e8d5de;
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+  .cart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5e8ee;
+  }
+  .cart-item-emoji { font-size: 32px; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 13px; font-weight: 500; }
+  .cart-item-price { font-size: 12px; color: var(--pink); font-weight: 600; }
+  .qty-control {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qty-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid #f0d8e4;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--pink);
+    font-weight: 700;
+  }
+  .qty-num { font-size: 13px; font-weight: 600; min-width: 16px; text-align: center; }
+
+  .cart-empty {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .cart-empty .empty-icon { font-size: 48px; margin-bottom: 8px; }
+
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0 4px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .total-price { color: var(--pink); font-family: 'Playfair Display', serif; font-size: 18px; }
+
+  .checkout-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #e85d8a, #f7a8c4);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s;
+  }
+  .checkout-btn:active { opacity: 0.85; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 300;
+    transition: transform 0.3s;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">Kimmy <span>Store</span></div>
+    <button class="cart-btn" onclick="toggleCart()">
+      🛒
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="ស្វែងរកទំនិញ..." oninput="filterProducts(this.value)" id="searchInput">
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories" id="categories">
+  <button class="cat-btn active" onclick="filterCat('all', this)">ទាំងអស់</button>
+  <button class="cat-btn" onclick="filterCat('baby', this)">👶 Baby</button>
+  <button class="cat-btn" onclick="filterCat('skin', this)">✨ Skincare</button>
+  <button class="cat-btn" onclick="filterCat('feed', this)">🍼 Feeding</button>
+  <button class="cat-btn" onclick="filterCat('toy', this)">🧸 Toys</button>
+  <button class="cat-btn" onclick="filterCat('cloth', this)">👗 Clothes</button>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <h2>សម្រាប់ទារកទំនើប 🌸</h2>
+  <p>ទំនិញល្អ ថ្លៃសមរម្យ ដឹកជញ្ជូនរហ័ស</p>
+  <span class="banner-badge">FREE SHIP $20+</span>
+</div>
+
+<!-- PRODUCTS -->
+<div class="section-title">ទំនិញពេញនិយម</div>
+<div class="product-grid" id="productGrid"></div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
+<!-- CART MODAL -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-handle"></div>
+  <div class="cart-title">🛒 កន្ត្រកទំនិញ</div>
+  <div id="cartItems"></div>
+  <div id="cartFooter"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Telegram WebApp init
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+// ── PRODUCTS DATA ──────────────────────────────────────────────
+const products = [
+  { id:1, name:"Johnson's Baby Lotion", brand:"Johnson's", price:4.50, emoji:"🧴", cat:"baby", sale:false },
+  { id:2, name:"Pampers Newborn Diapers", brand:"Pampers", price:12.00, emoji:"👶", cat:"baby", sale:true },
+  { id:3, name:"Baby Dove Body Wash", brand:"Dove", price:5.50, emoji:"🛁", cat:"skin", sale:false },
+  { id:4, name:"Philips Avent Bottle 260ml", brand:"Philips Avent", price:9.00, emoji:"🍼", cat:"feed", sale:false },
+  { id:5, name:"Soft Plush Teddy Bear", brand:"Kimmy", price:7.00, emoji:"🧸", cat:"toy", sale:true },
+  { id:6, name:"Baby Onesie Cute Set", brand:"Kimmy", price:8.50, emoji:"👗", cat:"cloth", sale:false },
+  { id:7, name:"Baby Powder Johnson's", brand:"Johnson's", price:3.50, emoji:"🌸", cat:"baby", sale:false },
+  { id:8, name:"Wooden Rattle Toy", brand:"Kimmy", price:5.00, emoji:"🎀", cat:"toy", sale:true },
+  { id:9, name:"Baby Food Gerber Mix", brand:"Gerber", price:6.00, emoji:"🥣", cat:"feed", sale:false },
+  { id:10, name:"Sunscreen Baby SPF50", brand:"Banana Boat", price:10.00, emoji:"☀️", cat:"skin", sale:false },
+];
+
+let cart = {};
+let filtered = [...products];
+
+// ── RENDER PRODUCTS ────────────────────────────────────────────
+function renderProducts(list) {
+  const grid = document.getElementById('productGrid');
+  if (list.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9e7a8a;">រកមិនឃើញទំនិញ 😔</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <div class="product-card" onclick="addToCart(${p.id})">
+      <div class="product-img-wrap">
+        <div class="product-img">${p.emoji}</div>
+        ${p.sale ? `<span class="badge-sale">SALE</span>` : ''}
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-footer">
+          <div class="product-price">$${p.price.toFixed(2)}</div>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── FILTER ─────────────────────────────────────────────────────
+function filterCat(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  filtered = products.filter(p =>
+    (cat === 'all' || p.cat === cat) &&
+    (p.name.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search))
+  );
+  renderProducts(filtered);
+}
+
+function filterProducts(val) {
+  const activeCat = document.querySelector('.cat-btn.active');
+  const cat = activeCat ? activeCat.getAttribute('onclick').match(/'(\w+)'/)?.[1] || 'all' : 'all';
+  filtered = products.filter(p =>
+    (cat === 'all' || p.cat === cat) &&
+    (p.name.toLowerCase().includes(val.toLowerCase()) || p.brand.toLowerCase().includes(val.toLowerCase()))
+  );
+  renderProducts(filtered);
+}
+
+// ── CART ───────────────────────────────────────────────────────
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartBadge();
+  const p = products.find(x => x.id === id);
+  showToast(`${p.emoji} ${p.name} បានបន្ថែម!`);
+}
+
+function updateCartBadge() {
+  const total = Object.values(cart).reduce((a,b) => a+b, 0);
+  const badge = document.getElementById('cartCount');
+  badge.textContent = total;
+  badge.style.display = total > 0 ? 'flex' : 'none';
+}
+
+function toggleCart() {
+  const modal = document.getElementById('cartModal');
+  const overlay = document.getElementById('overlay');
+  const isOpen = modal.classList.contains('show');
+  if (!isOpen) renderCart();
+  modal.classList.toggle('show', !isOpen);
+  overlay.classList.toggle('show', !isOpen);
+}
+
+function renderCart() {
+  const items = Object.entries(cart);
+  const container = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div>កន្ត្រកទទេ</div>`;
+    footer.innerHTML = '';
+    return;
+  }
+
+  let total = 0;
+  container.innerHTML = items.map(([id, qty]) => {
+    const p = products.find(x => x.id == id);
+    total += p.price * qty;
+    return `
+      <div class="cart-item">
+        <div class="cart-item-emoji">${p.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-price">$${(p.price * qty).toFixed(2)}</div>
+        </div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${id}, -1)">−</button>
+          <span class="qty-num">${qty}</span>
+          <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  footer.innerHTML = `
+    <div class="cart-total">
+      <span>សរុប</span>
+      <span class="total-price">$${total.toFixed(2)}</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">✅ បញ្ជាទិញ</button>
+  `;
+}
+
+function changeQty(id, delta) {
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  updateCartBadge();
+  renderCart();
+}
+
+function checkout() {
+  const items = Object.entries(cart);
+  if (items.length === 0) return;
+
+  const lines = items.map(([id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return `${p.emoji} ${p.name} x${qty} = $${(p.price * qty).toFixed(2)}`;
+  });
+  const total = items.reduce((sum, [id, qty]) => sum + products.find(x => x.id == id).price * qty, 0);
+  const msg = `🛒 Order:\n${lines.join('\n')}\n\n💰 សរុប: $${total.toFixed(2)}`;
+
+  if (tg) {
+    tg.sendData(msg);
+  } else {
+    alert(msg);
+  }
+
+  cart = {};
+  updateCartBadge();
+  toggleCart();
+  showToast('✅ បញ្ជាទិញបានជោគជ័យ!');
+}
+
+// ── TOAST ──────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderProducts(products);
+</script>
+</body>
+</html>
